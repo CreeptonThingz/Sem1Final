@@ -1,5 +1,3 @@
-import jdk.jshell.execution.StreamingExecutionControl;
-
 public class Character {
     private String name, role;
     private int strength, toughness, intelligence, magic, influence;

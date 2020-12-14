@@ -6,7 +6,7 @@ import java.util.Random;
 public class MedivalTimes {
     public static void main(String[] args) throws IOException {
         boolean isActive = true, selectingCharacter, duplicateRole;
-        String choice, worldName, name, role = "";
+        String choice, worldName, name, role = "", fileName;
         int totalStatPoints = 0, mainStat = 0, strength = 0, toughness = 0, intelligence = 0, magic = 0, influence = 0, knights = 0, peasants = 0, clerics = 0, mages = 0, courtiers = 0;
         String[] roles = { "Knight", "Peasant", "Cleric", "Mage", "Courtier" };
 
@@ -16,7 +16,8 @@ public class MedivalTimes {
         SaveManager manager = new SaveManager();
 
         while (isActive) {
-            System.out.println("\n1. Create a new game\n" + 
+            System.out.println("\nMenu:\n" +
+                               "1. Create a new game\n" + 
                                "2. Validate a save file\n" + 
                                "3. Reroll/randomize an existing character\n" + 
                                "4. Quit\n");
@@ -132,6 +133,9 @@ public class MedivalTimes {
                         }
                     }
                     
+                    System.out.println("Save game to:");
+                    manager.setFileName(user.nextLine().trim());
+
                     manager.save();
                     System.out.println("Game Saved");
 
@@ -139,7 +143,13 @@ public class MedivalTimes {
 
                 // Validate files
                 case "2":
-                    System.out.println("Enter save file name:");
+                    System.out.println("\nEnter save file name:");
+                    if (!manager.validate(user.nextLine().trim())) {
+                        System.out.println("Successfully validated files");
+                    } else {
+                        System.out.println("Validation unsuccessful, check file");
+                    }
+
                     break;
 
                 // Reroll character
