@@ -30,16 +30,13 @@ public class MedivalTimes {
                     System.out.println("\nEnter World Name:");
                     worldName = user.nextLine().trim();
 
-                    System.out.println("Before");
                     manager.setWorldName(worldName);
-                    System.out.println("After");
 
                     for (int i = 0; i < 4; i++) {
                         selectingCharacter = true;
-                        System.out.println("Selecting character");
                         while (selectingCharacter) {
                             duplicateRole = false;
-                            System.out.println("No duplicate roles");
+                            totalStatPoints = 0;
 
                             while (totalStatPoints > 28 || totalStatPoints < 8) {
                                 mainStat = random.nextInt(4) + 7;
@@ -51,6 +48,8 @@ public class MedivalTimes {
             
                                 totalStatPoints = mainStat + strength + toughness + intelligence + magic + influence;
                             }
+
+                            System.out.println(mainStat + "," + strength + "," + toughness + "," + intelligence + "," + magic + "," + influence);
 
                             switch (random.nextInt(5)) {
                                 // Knight
@@ -103,12 +102,13 @@ public class MedivalTimes {
                                         duplicateRole = true;
                                         break;
                                     }
+
                                     role = roles[3];
                                     influence = mainStat;
                                     break;
                             }
         
-                            if (duplicateRole = false) {
+                            if (!duplicateRole) {
                                 System.out.println("\n" + role + "," + strength + "," + toughness + "," + intelligence + "," + magic + "," + influence);
     
                                 System.out.println("Confirm character? (y/n)");
