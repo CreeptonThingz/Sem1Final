@@ -1,5 +1,5 @@
-World of Guys
-Guy1,Mage,3,4,2,8,0
-Guy2,Peasant,6,10,6,5,0
-Guy3,Knight,8,3,0,0,2
-Guy4,Knight,8,6,5,3,0
+World One
+Bob,Peasant,1,10,0,6,3
+Philip,Courtier,1,2,1,5,9
+BetterPhilip,Courtier,3,5,3,3,10
+MagicDude,Mage,0,6,1,10,1

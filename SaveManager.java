@@ -5,17 +5,20 @@ import java.io.*;
 public class SaveManager {
     private Character[] myCharacters;
     private String worldName, fileName;
-    private int characterAmnt;
+    private int characterAmnt, characterNum;
     private String[] characterData;
 
     Random random = new Random();
 
     public SaveManager() {
         myCharacters = new Character[4];
+        characterAmnt = 0;
+        characterNum = 0;
     }
 
     public void createCharacter(String name, String role, int strength, int toughness, int intelligence, int magic, int influence) {
         myCharacters[characterAmnt] = new Character(name, role, strength, toughness, intelligence, magic, influence);
+        characterAmnt++;
     }
 
     public boolean validate(String saveFileName) throws IOException {
@@ -23,6 +26,8 @@ public class SaveManager {
         Scanner scan = new Scanner(file);
         int knights = 0, peasants = 0, clerics = 0, mages = 0, courtiers = 0, totalStatPoints = 0, strength = 0, toughness = 0, intelligence = 0, magic = 0, influence = 0;
         String role = "";
+
+        characterAmnt = 0;
         
         String line = scan.nextLine();
 
@@ -129,6 +134,32 @@ public class SaveManager {
         return false;
     }
 
+    public boolean checkForCharacter(String saveFileName, String characterName) throws IOException {
+        File file = new File(saveFileName);
+        Scanner scan = new Scanner(file);
+
+        String line;
+
+        while (scan.hasNextLine()) {
+            line = scan.nextLine();
+
+            if (line.startsWith(characterName)) { 
+                characterNum -= 1;
+
+                scan.close();
+                return true; 
+            }
+            characterNum++;
+        }
+
+        scan.close();
+        return false;
+    }
+
+    public void updateCharacter(String characterName, String role, int strength, int toughness, int intelligence, int magic, int influence) {
+        myCharacters[characterNum] = new Character(characterName, role, strength, toughness, intelligence, magic, influence);
+    }
+
     public void save() throws IOException {
         PrintWriter output = new PrintWriter(fileName);
 
@@ -148,4 +179,6 @@ public class SaveManager {
 
     public void setWorldName(String worldName) { this.worldName = worldName; }
     public void setFileName(String fileName) { this.fileName = fileName; }
+
+    public String getCharacterRole() { return myCharacters[0].getRole(); }
 }
