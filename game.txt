@@ -1,0 +1,5 @@
+World of Guys
+Guy1,Mage,3,4,2,8,0
+Guy2,Peasant,6,10,6,5,0
+Guy3,Knight,8,3,0,0,2
+Guy4,Knight,8,6,5,3,0
