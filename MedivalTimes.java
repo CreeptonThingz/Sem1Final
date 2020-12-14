@@ -49,8 +49,6 @@ public class MedivalTimes {
                                 totalStatPoints = mainStat + strength + toughness + intelligence + magic + influence;
                             }
 
-                            System.out.println(mainStat + "," + strength + "," + toughness + "," + intelligence + "," + magic + "," + influence);
-
                             switch (random.nextInt(5)) {
                                 // Knight
                                 case 0:
@@ -139,14 +137,17 @@ public class MedivalTimes {
 
                     break;
 
+                // Validate files
                 case "2":
-                    System.out.println("Selected 2");
+                    System.out.println("Enter save file name:");
                     break;
 
+                // Reroll character
                 case "3":
                     System.out.println("Selected 3");
                     break;
 
+                // Quit menu
                 case "4":
                     System.out.println("Quitting...");
                     isActive = false;
