@@ -1,18 +1,18 @@
 import java.util.Scanner;
-import java.util.Random;
 import java.io.*;
 
 public class MedivalTimes {
     public static void main(String[] args) throws IOException {
-        boolean isActive = true, selectingCharacter, duplicateRole;
-        String choice, worldName, name, role = "", characterName, fileName;
-        int totalStatPoints = 0, mainStat = 0, strength = 0, toughness = 0, intelligence = 0, magic = 0, influence = 0, knights = 0, peasants = 0, clerics = 0, mages = 0, courtiers = 0;
+        boolean isActive = true, selectingCharacter;
+        String choice, fileName, gameCharacterName;
+        int selectedRole, mainStat = 0;
         String[] roles = { "Knight", "Peasant", "Cleric", "Mage", "Courtier" };
+        String[] mainStats = { "strength", "toughness", "intelligence", "magic", "influence"};
+        GameCharacter gameCharacter;
 
         Scanner user = new Scanner(System.in);
-        Random random = new Random();
 
-        SaveManager manager = new SaveManager();
+        GameManager manager = new GameManager();
 
         while (isActive) {
             System.out.println("\nMenu:\n" +
@@ -28,127 +28,137 @@ public class MedivalTimes {
                 // Create a new game with characters
                 case "1":
                     System.out.println("\nEnter World Name:");
-                    worldName = user.nextLine().trim();
-
-                    manager.setWorldName(worldName);
+                    manager.setWorldName(user.nextLine().trim());
 
                     for (int i = 0; i < 4; i++) {
+                        System.out.println("\n1. Knight\n" + 
+                                           "2. Peasant\n" + 
+                                           "3. Cleric\n" + 
+                                           "4. Mage\n" + 
+                                           "5. Courtier");
+
+                        System.out.println("\nEnter Character " + (i+1) + " Role:");
+                        selectedRole = Integer.parseInt(user.nextLine());
+
+                        while (selectedRole > 5 || selectedRole < 1 || manager.checkRoleCount(selectedRole)) {
+                            System.out.println("\nRole does not exist or exceeds the role limit, try again");
+                            selectedRole = Integer.parseInt(user.nextLine());
+                        }
+                        
+                        System.out.println("\nEnter " + mainStats[selectedRole-1] + " stat number (7-10):");
+                        mainStat = Integer.parseInt(user.nextLine());
+
+                        while (mainStat > 10 || mainStat < 7) {
+                            System.out.println("\nStat number is out of range, try again");
+                            mainStat = Integer.parseInt(user.nextLine());
+                        }
+
                         selectingCharacter = true;
-                        while (selectingCharacter) {
-                            duplicateRole = false;
-                            totalStatPoints = 0;
+                        switch (selectedRole) {
+                            case 1:
+                                while (selectingCharacter) {
+                                    gameCharacter = GameCharacter.knight(mainStat);
 
-                            // Obtains random stats
-                            while (totalStatPoints > 28 || totalStatPoints < 8) {
-                                mainStat = rollMainStat(random);
-                                strength = rollStat(random);
-                                toughness = rollStat(random);
-                                intelligence = rollStat(random);
-                                magic = rollStat(random);
-                                influence = rollStat(random);
-                    
-                                // Applies main stat to respective role unless there are too many roles
-                                switch (random.nextInt(5)) {
-                                    // Knight
-                                    case 0:
-                                        if (knights == 2) {
-                                            duplicateRole = true;
-                                            break;
-                                        }
+                                    System.out.println("\n" + gameCharacter.presentCharacter() + "\n");
 
-                                        role = roles[0];
-                                        strength = mainStat;
-                                        break;
+                                    System.out.println("Accept character? (y/n)");
+                                    choice = user.nextLine().trim();
 
-                                    // Peasant
-                                    case 1:
-                                        if (peasants == 2) {
-                                            duplicateRole = true;
-                                            break;
-                                        }
+                                    if (choice.equals("y")) {
+                                        selectingCharacter = false;
+                                        
+                                        System.out.println("\nName your character:");
+                                        gameCharacter.setName(user.nextLine().trim());
 
-                                        role = roles[1];
-                                        toughness = mainStat;
-                                        break;
-
-                                    // Cleric
-                                    case 2:
-                                        if (clerics == 2) {
-                                            duplicateRole = true;
-                                            break;
-                                        }
-
-                                        role = roles[2];
-                                        intelligence = mainStat;
-                                        break;
-
-                                    // Mage
-                                    case 3:
-                                        if (mages == 2) {
-                                            duplicateRole = true;
-                                            break;
-                                        }
-
-                                        role = roles[3];
-                                        magic = mainStat;
-                                        break;
-
-                                    // Courtier
-                                    case 4:
-                                        if (courtiers == 2) {
-                                            duplicateRole = true;
-                                            break;
-                                        }
-
-                                        role = roles[4];
-                                        influence = mainStat;
-                                        break;
-                                }
-
-                                totalStatPoints = strength + toughness + intelligence + magic + influence;
-                            }
-
-                            if (!duplicateRole) {
-                                System.out.println("\n" + role + "," + strength + "," + toughness + "," + intelligence + "," + magic + "," + influence);
-
-                                System.out.println("\nConfirm character? (y/n)");
-                                choice = user.nextLine().trim().toLowerCase();
-
-                                if (choice.equals("y")) { 
-                                    switch (role) {
-                                        case "Knight": 
-                                            knights++;
-                                            break;
-
-                                        case "Peasant": 
-                                            peasants++;
-                                            break;
-                                            
-                                        case "Cleric": 
-                                            clerics++;
-                                            break;
-
-                                        case "Mage": 
-                                            mages++;
-                                            break;
-
-                                        case "Courtier": 
-                                            courtiers++;
-                                            break;
+                                        manager.addCharacter(gameCharacter);
                                     }
-
-                                    System.out.println("\nEnter character name:");
-                                    name = user.nextLine().trim();
-
-                                    manager.createCharacter(name, role, strength, toughness, intelligence, magic, influence);
-
-                                    selectingCharacter = false; 
                                 }
-                            }                     
+                                break;
+
+                            case 2:
+                                while (selectingCharacter) {
+                                    gameCharacter = GameCharacter.peasant(mainStat);
+
+                                    System.out.println(gameCharacter + "\n");
+
+                                    System.out.println("Accept character? (y/n)");
+                                    choice = user.nextLine().trim();
+
+                                    if (choice.equals("y")) {
+                                        selectingCharacter = false;
+
+                                        System.out.println("Name your character:");
+                                        gameCharacter.setName(user.nextLine().trim());
+
+                                        manager.addCharacter(gameCharacter);
+                                    }
+                                }
+                                break;
+
+                            case 3:
+                                while (selectingCharacter) {
+                                    gameCharacter = GameCharacter.cleric(mainStat);
+
+                                    System.out.println(gameCharacter + "\n");
+
+                                    System.out.println("Accept character? (y/n)");
+                                    choice = user.nextLine().trim();
+
+                                    if (choice.equals("y")) {
+                                        selectingCharacter = false;
+
+                                        System.out.println("Name your character:");
+                                        gameCharacter.setName(user.nextLine().trim());
+
+                                        manager.addCharacter(gameCharacter);
+                                    }
+                                }
+                                break;
+
+                            case 4:
+                                while (selectingCharacter) {
+                                    gameCharacter = GameCharacter.mage(mainStat);
+
+                                    System.out.println(gameCharacter + "\n");
+
+                                    System.out.println("Accept character? (y/n)");
+                                    choice = user.nextLine().trim();
+
+                                    if (choice.equals("y")) {
+                                        selectingCharacter = false;
+
+                                        System.out.println("Name your character:");
+                                        gameCharacter.setName(user.nextLine().trim());
+
+                                        manager.addCharacter(gameCharacter);
+                                    }
+                                }
+                                break;
+
+                            case 5:
+                                while (selectingCharacter) {
+                                    gameCharacter = GameCharacter.courtier(mainStat);
+
+                                    System.out.println(gameCharacter + "\n");
+
+                                    System.out.println("Accept character? (y/n)");
+                                    choice = user.nextLine().trim();
+
+                                    if (choice.equals("y")) {
+                                        selectingCharacter = false;
+
+                                        System.out.println("Name your character:");
+                                        gameCharacter.setName(user.nextLine().trim());
+
+                                        manager.addCharacter(gameCharacter);
+                                    }
+                                }
+                                break;  
                         }
                     }
 
                     manager.resetCharacterAmount();
+                    manager.resetRoleCount();
                     
                     System.out.println("\nSave game to:");
                     manager.save(user.nextLine().trim());
@@ -166,6 +176,7 @@ public class MedivalTimes {
                     }
 
                     manager.resetCharacterAmount();
+                    manager.resetRoleCount();
                     break;
 
                 // Reroll character
@@ -174,47 +185,9 @@ public class MedivalTimes {
                     fileName = user.nextLine().trim();
 
                     System.out.println("\nEnter character name to reroll:");
-                    characterName = user.nextLine().trim();
-                    
-                    if (manager.checkForCharacter(fileName, characterName)) {
-                        totalStatPoints = 0;
+                    gameCharacterName = user.nextLine().trim();
 
-                        while (totalStatPoints > 28 || totalStatPoints < 8) {
-                            mainStat = rollMainStat(random);
-                            strength = rollStat(random);
-                            toughness = rollStat(random);
-                            intelligence = rollStat(random);
-                            magic = rollStat(random);
-                            influence = rollStat(random);
-
-                            switch (manager.getCharacterRole()) {
-                                case "Knight": 
-                                    strength = mainStat;
-                                    break;
-
-                                case "Peasant": 
-                                    toughness = mainStat;
-                                    break;
-
-                                case "Cleric": 
-                                    intelligence = mainStat;
-                                    break;
-
-                                case "Mage": 
-                                    magic = mainStat;
-                                    break;
-
-                                case "Courtier": 
-                                    influence = mainStat;
-                                    break;
-
-                            }
-
-                            totalStatPoints = strength + toughness + intelligence + magic + influence;
-                        }
-
-                        manager.updateCharacter(characterName, manager.getCharacterRole(), strength, toughness, intelligence, magic, influence);
-                    } else {
+                    if (!manager.reRollCharacter(fileName, gameCharacterName)) {
                         System.out.println("\nCharacter not found");
                     }
 
@@ -233,13 +206,5 @@ public class MedivalTimes {
         }
 
         user.close();
-    }
-
-    private static int rollStat(Random random) {
-        return random.nextInt(7);
-    }
-
-    private static int rollMainStat(Random random) {
-        return random.nextInt(4) + 7;
     }
 }
