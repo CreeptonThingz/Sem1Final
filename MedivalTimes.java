@@ -6,7 +6,6 @@ public class MedivalTimes {
         boolean isActive = true, selectingCharacter;
         String choice, fileName, gameCharacterName;
         int selectedRole, mainStat = 0;
-        String[] roles = { "Knight", "Peasant", "Cleric", "Mage", "Courtier" };
         String[] mainStats = { "strength", "toughness", "intelligence", "magic", "influence"};
         GameCharacter gameCharacter;
 
