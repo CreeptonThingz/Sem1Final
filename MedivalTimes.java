@@ -19,9 +19,9 @@ public class MedivalTimes {
                                "1. Create a new game\n" + 
                                "2. Validate a save file\n" + 
                                "3. Reroll/randomize an existing character\n" + 
-                               "4. Quit\n");
+                               "4. Quit");
             
-            System.out.println("Input selection:");
+            System.out.println("\nInput selection:");
             String selection = user.nextLine().trim();
 
             switch (selection) {
@@ -79,7 +79,7 @@ public class MedivalTimes {
                                 while (selectingCharacter) {
                                     gameCharacter = GameCharacter.peasant(mainStat);
 
-                                    System.out.println(gameCharacter + "\n");
+                                    System.out.println("\n" + gameCharacter.presentCharacter() + "\n");
 
                                     System.out.println("Accept character? (y/n)");
                                     choice = user.nextLine().trim();
@@ -87,7 +87,7 @@ public class MedivalTimes {
                                     if (choice.equals("y")) {
                                         selectingCharacter = false;
 
-                                        System.out.println("Name your character:");
+                                        System.out.println("\nName your character:");
                                         gameCharacter.setName(user.nextLine().trim());
 
                                         manager.addCharacter(gameCharacter);
@@ -99,7 +99,7 @@ public class MedivalTimes {
                                 while (selectingCharacter) {
                                     gameCharacter = GameCharacter.cleric(mainStat);
 
-                                    System.out.println(gameCharacter + "\n");
+                                    System.out.println("\n" + gameCharacter.presentCharacter() + "\n");
 
                                     System.out.println("Accept character? (y/n)");
                                     choice = user.nextLine().trim();
@@ -107,7 +107,7 @@ public class MedivalTimes {
                                     if (choice.equals("y")) {
                                         selectingCharacter = false;
 
-                                        System.out.println("Name your character:");
+                                        System.out.println("\nName your character:");
                                         gameCharacter.setName(user.nextLine().trim());
 
                                         manager.addCharacter(gameCharacter);
@@ -119,7 +119,7 @@ public class MedivalTimes {
                                 while (selectingCharacter) {
                                     gameCharacter = GameCharacter.mage(mainStat);
 
-                                    System.out.println(gameCharacter + "\n");
+                                    System.out.println("\n" + gameCharacter.presentCharacter() + "\n");
 
                                     System.out.println("Accept character? (y/n)");
                                     choice = user.nextLine().trim();
@@ -127,7 +127,7 @@ public class MedivalTimes {
                                     if (choice.equals("y")) {
                                         selectingCharacter = false;
 
-                                        System.out.println("Name your character:");
+                                        System.out.println("\nName your character:");
                                         gameCharacter.setName(user.nextLine().trim());
 
                                         manager.addCharacter(gameCharacter);
@@ -139,7 +139,7 @@ public class MedivalTimes {
                                 while (selectingCharacter) {
                                     gameCharacter = GameCharacter.courtier(mainStat);
 
-                                    System.out.println(gameCharacter + "\n");
+                                    System.out.println("\n" + gameCharacter.presentCharacter() + "\n");
 
                                     System.out.println("Accept character? (y/n)");
                                     choice = user.nextLine().trim();
@@ -147,7 +147,7 @@ public class MedivalTimes {
                                     if (choice.equals("y")) {
                                         selectingCharacter = false;
 
-                                        System.out.println("Name your character:");
+                                        System.out.println("\nName your character:");
                                         gameCharacter.setName(user.nextLine().trim());
 
                                         manager.addCharacter(gameCharacter);
@@ -157,9 +157,6 @@ public class MedivalTimes {
                         }
                     }
 
-                    manager.resetCharacterAmount();
-                    manager.resetRoleCount();
-                    
                     System.out.println("\nSave game to:");
                     manager.save(user.nextLine().trim());
                     System.out.println("\nGame Saved");
@@ -175,8 +172,6 @@ public class MedivalTimes {
                         System.out.println("\nValidation unsuccessful, check file");
                     }
 
-                    manager.resetCharacterAmount();
-                    manager.resetRoleCount();
                     break;
 
                 // Reroll character
@@ -184,14 +179,16 @@ public class MedivalTimes {
                     System.out.println("\nEnter save file name:");
                     fileName = user.nextLine().trim();
 
+                    manager.load(fileName);
+                    System.out.print("\n" + manager);
+
                     System.out.println("\nEnter character name to reroll:");
                     gameCharacterName = user.nextLine().trim();
 
-                    if (!manager.reRollCharacter(fileName, gameCharacterName)) {
+                    if (!manager.reRollCharacter(gameCharacterName)) {
                         System.out.println("\nCharacter not found");
                     }
 
-                    manager.resetCharacterAmount();
                     manager.save(fileName);
                     break;
                 

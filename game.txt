@@ -1,5 +1,5 @@
 The World
-Bob,Knight,10,1,5,3,6
-Hughes,Peasant,0,10,5,2,3
-Jack,Cleric,6,3,10,4,5
-Jackson,Cleric,6,0,7,4,1
+Bob,Knight,10,5,3,2,3
+Hughes,Mage,6,6,3,9,2
+Jack,Cleric,0,4,8,2,2
+Jackson,Courtier,1,4,3,5,9

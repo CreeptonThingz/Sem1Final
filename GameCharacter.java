@@ -32,6 +32,7 @@ public class GameCharacter {
     public String getName() { return name; }
     public String getRole() { return role; }
 
+    // Role presets
     public static GameCharacter knight(int strength) {
         int[] randomStats = randomStats(strength);
 
@@ -62,6 +63,39 @@ public class GameCharacter {
         return new GameCharacter("Courtier", randomStats[0], randomStats[1], randomStats[2], randomStats[3], influence);
     }
 
+    // Validation for each role - check that main stat is the only main stat - check that no stat is below 0
+    public boolean checkCharacterStats() {
+        switch (role) {
+            case "Knight":
+                if (strength > 10 || strength < 7 || toughness > 6 || intelligence > 6 || magic > 6 || influence > 6 ) { return false; }
+                if (toughness < 0 || intelligence < 0 || magic < 0 || influence < 0) { return false; }
+        
+                return true;
+            case "Peasant":
+                if (toughness > 10 || toughness < 7 || strength > 6 || intelligence > 6 || magic > 6 || influence > 6) { return false; }
+                if (strength < 0 || intelligence < 0 || magic < 0 || influence < 0) { return false; }
+        
+                return true;
+            case "Cleric":
+                if (intelligence > 10 || intelligence < 7 || toughness > 6 || strength > 6 || magic > 6 || influence > 6) { return false; }
+                if (toughness < 0 || strength < 0 || magic < 0 || influence < 0) { return false; }
+        
+                return true;
+            case "Mage":
+                if (magic > 10 || magic < 7 || toughness > 6 || intelligence > 6 || strength > 6 || influence > 6) { return false; }
+                if (toughness < 0 || intelligence < 0 || strength < 0 || influence < 0) { return false; }
+
+                return true;
+            case "Courtier":
+                if (influence > 10 || influence < 7 || toughness > 6 || intelligence > 6 || magic > 6 || strength > 6) { return false; }
+                if (toughness < 0 || intelligence < 0 || magic < 0 || strength < 0) { return false; }
+        
+                return true;
+            default: return false;
+        }
+   }
+
+    // Randomization of stats
     private static int[] randomStats(int mainStat) {
         int[] remainingStats = new int[4];
         int totalStatPoints = 0;
