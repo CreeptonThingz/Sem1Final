@@ -4,7 +4,7 @@ import java.io.*;
 
 public class SaveManager {
     private Character[] myCharacters;
-    private String worldName, fileName;
+    private String worldName;
     private int characterAmnt, characterNum;
     private String[] characterData;
 
@@ -24,10 +24,9 @@ public class SaveManager {
     public boolean validate(String saveFileName) throws IOException {
         File file = new File(saveFileName);
         Scanner scan = new Scanner(file);
-        int knights = 0, peasants = 0, clerics = 0, mages = 0, courtiers = 0, totalStatPoints = 0, strength = 0, toughness = 0, intelligence = 0, magic = 0, influence = 0;
+        int knights = 0, peasants = 0, clerics = 0, mages = 0, courtiers = 0;
+        int totalStatPoints = 0, strength = 0, toughness = 0, intelligence = 0, magic = 0, influence = 0;
         String role = "";
-
-        characterAmnt = 0;
         
         String line = scan.nextLine();
 
@@ -138,18 +137,26 @@ public class SaveManager {
         File file = new File(saveFileName);
         Scanner scan = new Scanner(file);
 
-        String line;
+        characterNum = 0;
 
+        String line = scan.nextLine();
+        setWorldName(line);
+
+        // Reads data
         while (scan.hasNextLine()) {
             line = scan.nextLine();
+            characterData = line.split(",");
 
-            if (line.startsWith(characterName)) { 
-                characterNum -= 1;
+            myCharacters[characterAmnt] = new Character(characterData[0], characterData[1], Integer.parseInt(characterData[2]), Integer.parseInt(characterData[3]), Integer.parseInt(characterData[4]), Integer.parseInt(characterData[5]), Integer.parseInt(characterData[6]));
+            characterAmnt++;
+        }
 
+        for (int i = 0; i < 4; i++) {
+            if (myCharacters[i].getUsername().equals(characterName)) {
+                characterNum = i;
                 scan.close();
-                return true; 
+                return true;
             }
-            characterNum++;
         }
 
         scan.close();
@@ -160,7 +167,7 @@ public class SaveManager {
         myCharacters[characterNum] = new Character(characterName, role, strength, toughness, intelligence, magic, influence);
     }
 
-    public void save() throws IOException {
+    public void save(String fileName) throws IOException {
         PrintWriter output = new PrintWriter(fileName);
 
         output.print(toString());
@@ -177,8 +184,9 @@ public class SaveManager {
         return str;
     }
 
-    public void setWorldName(String worldName) { this.worldName = worldName; }
-    public void setFileName(String fileName) { this.fileName = fileName; }
+    public void resetCharacterAmount() { characterAmnt = 0; }
 
-    public String getCharacterRole() { return myCharacters[0].getRole(); }
+    public void setWorldName(String worldName) { this.worldName = worldName; }
+
+    public String getCharacterRole() { return myCharacters[characterNum].getRole(); }
 }

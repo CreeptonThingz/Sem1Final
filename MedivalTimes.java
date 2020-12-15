@@ -110,7 +110,6 @@ public class MedivalTimes {
 
                             if (!duplicateRole) {
                                 System.out.println("\n" + role + "," + strength + "," + toughness + "," + intelligence + "," + magic + "," + influence);
-                                System.out.println("\n" + knights + "," + peasants + "," + clerics + "," + mages + "," + courtiers);
 
                                 System.out.println("\nConfirm character? (y/n)");
                                 choice = user.nextLine().trim().toLowerCase();
@@ -148,12 +147,12 @@ public class MedivalTimes {
                             }                     
                         }
                     }
+
+                    manager.resetCharacterAmount();
                     
                     System.out.println("\nSave game to:");
-                    manager.setFileName(user.nextLine().trim());
-
-                    manager.save();
-                    System.out.println("Game Saved");
+                    manager.save(user.nextLine().trim());
+                    System.out.println("\nGame Saved");
 
                     break;
 
@@ -166,6 +165,7 @@ public class MedivalTimes {
                         System.out.println("\nValidation unsuccessful, check file");
                     }
 
+                    manager.resetCharacterAmount();
                     break;
 
                 // Reroll character
@@ -177,6 +177,8 @@ public class MedivalTimes {
                     characterName = user.nextLine().trim();
                     
                     if (manager.checkForCharacter(fileName, characterName)) {
+                        totalStatPoints = 0;
+
                         while (totalStatPoints > 28 || totalStatPoints < 8) {
                             mainStat = rollMainStat(random);
                             strength = rollStat(random);
@@ -186,22 +188,38 @@ public class MedivalTimes {
                             influence = rollStat(random);
 
                             switch (manager.getCharacterRole()) {
-                                case "Knight": strength = mainStat;
-                                case "Peasant": toughness = mainStat;
-                                case "Cleric": intelligence = mainStat;
-                                case "Mage": magic = mainStat;
-                                case "Courtier": influence = mainStat;
+                                case "Knight": 
+                                    strength = mainStat;
+                                    break;
+
+                                case "Peasant": 
+                                    toughness = mainStat;
+                                    break;
+
+                                case "Cleric": 
+                                    intelligence = mainStat;
+                                    break;
+
+                                case "Mage": 
+                                    magic = mainStat;
+                                    break;
+
+                                case "Courtier": 
+                                    influence = mainStat;
+                                    break;
+
                             }
 
                             totalStatPoints = strength + toughness + intelligence + magic + influence;
                         }
 
-                        
-
                         manager.updateCharacter(characterName, manager.getCharacterRole(), strength, toughness, intelligence, magic, influence);
                     } else {
                         System.out.println("\nCharacter not found");
                     }
+
+                    manager.resetCharacterAmount();
+                    manager.save(fileName);
                     break;
                 
                 // Quit menu

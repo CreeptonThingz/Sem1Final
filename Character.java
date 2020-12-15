@@ -16,5 +16,6 @@ public class Character {
         return name + "," + role + "," + strength + "," + toughness + "," + intelligence + "," + magic + ","  + influence;
     }
 
+    public String getUsername() { return name; }
     public String getRole() { return role; }
 }
